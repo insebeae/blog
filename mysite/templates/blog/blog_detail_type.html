@@ -1,0 +1,8 @@
+{% extends 'blog/blog_list.html' %}
+{% block title %}
+    <title>文章分类详情</title>
+{% endblock %}
+{% block blog_list%} 
+    <p>文章分类详情:{{ blog_list|length }}篇博客</p>
+    <a href="{% url 'blog:blog_list' %}">所有分类总览</a>
+{% endblock%}

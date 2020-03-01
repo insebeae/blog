@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>{{ page_tilte }}</title>
+{% endblock %}
+{% block active_blog %}active{% endblock %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-10 col-xs-offset-2">
+                <div class="panel panel-default ">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">{{ form_title }}</h3>
+                  </div>
+                  <div class="panel-body">
+                        <form action="" method="POST">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            {% if not field.is_hidden %}
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {% endif %}
+                            {{ field }}
+                            <p class="text-danger">{{ field.errors.as_text }}</p>
+                        {% endfor %}
+                        <span class="pull-left text-danger" id="tip">{{ form.non_field_errors }}</span>
+                        {# 清除浮动#}
+                        <div class="clearfix"></div>
+                        <div class="pull-left">
+                            {% block otherbutton %}{% endblock %}
+                        </div>
+                        <div class="pull-right">
+                            <button class="btn btn-default" onclick="window.location.href='{{ redict_back }}'">返回</button>&nbsp;
+                            <input type="submit" class="btn btn-primary pull-right" name="{{ sub_text }}" value="{{ sub_text  }}">
+                        </div>
+
+                        </form>
+                  </div>
+                </div>            
+            </div>
+
+        </div>
+    </div>
+                
+{% endblock %}

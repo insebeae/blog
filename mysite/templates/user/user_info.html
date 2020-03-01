@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>个人信息</title>
+{% endblock %}
+{% load static %}
+{% block active_blog %}active{% endblock %}
+{% block header_css %}
+    <link rel="stylesheet" href="{% static 'css/blog_list.css' %}">
+{% endblock %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-10 col-xs-offset-2">
+                <h2> {{ user.username}}</h2>
+                <ul>
+                    <li>昵称:{{ user.get_nickname }} <a href="{% url 'user:change_nickname' %}?from={{ request.get_full_path }}">修改昵称</a></li>
+                    <li>邮箱:{% if user.email %} {{ user.email }}{% else %} 暂无邮箱  <a href="{% url 'user:bingd_email' %}?from={{ request.get_full_path }}">绑定邮箱</a>  {%endif%}</li>
+                    <li>上次登陆时间:{{ user.last_login|date:"Y:m:d H:n:s" }}</li>
+                <li> <a href="{% url 'user:change_password' %}?from={{ request.get_full_path }}">修改密码</a> </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        {#跳转到首页#}
+        {#window.location.href = "/"#}
+    </script>
+{% endblock %}

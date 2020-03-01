@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    <title>欢迎访问博客</title>
+{% endblock %}
+{% block header_css %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <script src="https://cdn.bootcss.com/echarts/4.6.0/echarts-en.common.js"></script>
+{% endblock %}
+{% block active_home %}active{% endblock %}
+{% block content %}
+    <h3 id="index_h3">欢迎访问我的博客网站</h3>
+    <div id="main" style="width: 800px;height:400px;"></div>
+    <div id="container">
+        <h1>今天热门点击</h1>
+        <ul>
+            {%  for hot_blog in  result_hot_today_all %}
+                <li><a href="{% url 'blog:blog_detail' hot_blog.content_object.id %}">{{  hot_blog.content_object.title }} ({{  hot_blog.read_num }})</a></li>
+            {% empty %}
+                    <li>暂无热门点击</li>
+            {% endfor %}
+        </ul>
+        <h1>昨天热门点击</h1>
+        <ul>
+            {%  for hot_blog in  result_hot_ysetday_all %}
+                <li><a href="{% url 'blog:blog_detail' hot_blog.content_object.id %}">{{  hot_blog.content_object.title }} ({{  hot_blog.read_num }})</a></li>
+            {% empty %}
+                    <li>暂无热门点击</li>
+            {% endfor %}
+        </ul>
+        <h1>七天热门点击</h1>
+        <ul>
+            {%  for hot_blog in  get_seven_day_all %}
+                <li><a href="{% url 'blog:blog_detail' hot_blog.id %}">{{  hot_blog.title }} ({{  hot_blog.read_num_sum }})</a></li>
+            {% empty %}
+                    <li>暂无热门点击</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}
+{% block script %}
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var  option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer:{
+                    lineStyle:{
+                        color:'#52cdef',
+                        type:'dashed',
+                    }
+                }
+            },
+
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: {{ date_all|safe }},
+            },
+            yAxis: {
+                show:false,
+                type: 'value',
+                splitLine:{
+                    lineStyle:{
+                         opacity:0.3,
+                    }
+                }
+            },
+            series: [
+                {
+                    type: 'line',
+                    stack: '访问总量',
+                    data: {{ result_all }},
+                },
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+{% endblock %}

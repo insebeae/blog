@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}{% endblock %}</title>
+    <script type="text/javascript" src="{% static 'jquery/jquery-3.3.1.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.css' %}">
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+
+    {% block header_css %}{% endblock %}
+</head>
+<body>
+    <div class="navbar navbar-default navbar-fixed-top " role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header ">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">12131</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+                <a href="/" class="navbar-brand ">个人博客</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="{% block active_home %}{% endblock %}">
+                        <a href="{% url 'home' %}" >返回首页</a>
+                    </li>
+                    <li class="{% block active_blog %}{% endblock %}">
+                        <a href="{% url 'blog:blog_list' %}">博客列表</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if not user.is_authenticated %}
+                        <li><a href="{% url 'user:login' %}?from={{ request.get_full_path }}">登陆</a></li>
+                        <li><a href="{% url 'user:register' %}?from={{ request.get_full_path }}">注册</a></li>
+                    {% else %}
+                        <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.get_nickname_or_username }} <span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                            <li><a href="{% url 'user:user_info' %}">个人资料</a></li>
+                            <li><a href="{% url 'user:logout' %}?from={{ request.get_full_path }}">登出</a></li>
+                              <li><a href="{% url 'user:change_password' %}?from={{ request.get_full_path }}">修改密码</a></li>
+                          </ul>
+                        </li>
+                    {% endif %}
+
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <div>{% block content %}{% endblock %}</div>
+</body>
+{% block script %}{% endblock %}
+</html>
